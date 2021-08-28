@@ -36,6 +36,11 @@ import BlogCard from "../components/BlogCard.vue";
 export default {
   name: "Home",
   components: { BlogPost, BlogCard },
+  computed: {
+    sampleBlogCards() {
+      return this.$store.state.sampleBlogCards;
+    },
+  },
   data() {
     return {
       welcomeScreen: {
@@ -55,28 +60,6 @@ export default {
           title: "This is Filler Title!",
           blogHTML: "This is a filler blog post title!",
           blogCoverPhoto: "designed-for-everyone",
-        },
-      ],
-      sampleBlogCards: [
-        {
-          blogTitle: "Blog Card #1",
-          blogCoverPhoto: "stock-1",
-          blogDate: "Aug 23, 2021",
-        },
-        {
-          blogTitle: "Blog Card #2",
-          blogCoverPhoto: "stock-2",
-          blogDate: "Aug 24, 2021",
-        },
-        {
-          blogTitle: "Blog Card #3",
-          blogCoverPhoto: "stock-3",
-          blogDate: "Aug 25, 2021",
-        },
-        {
-          blogTitle: "Blog Card #4",
-          blogCoverPhoto: "stock-4",
-          blogDate: "Aug 26, 2021",
         },
       ],
     };

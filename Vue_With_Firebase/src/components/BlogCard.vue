@@ -1,6 +1,6 @@
 <template>
   <div class="blog-card">
-    <div class="icons">
+    <div class="icons" v-show="editPost">
       <div class="icon">
         <Edit class="edit"></Edit>
       </div>
@@ -38,7 +38,11 @@ export default {
     Delete,
   },
   methods: {},
-  computed: {},
+  computed: {
+    editPost() {
+      return this.$store.state.editPost;
+    },
+  },
 };
 </script>
 
