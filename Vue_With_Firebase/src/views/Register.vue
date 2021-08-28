@@ -1,5 +1,6 @@
 <template>
   <div class="form-wrap">
+    <Loading v-if="loading" />
     <form class="register">
       <p class="login-register">
         Already have an account?
@@ -29,8 +30,9 @@
           <input type="password" placeholder="Password" v-model="password" />
           <password class="icon" />
         </div>
+        <div class="error" v-show="error">{{ this.errorMsg }}</div>
       </div>
-      <button>Sign Up</button>
+      <button @click.prevent="register">Sign Up</button>
       <div class="angle"></div>
     </form>
     <div class="background"></div>
@@ -38,13 +40,18 @@
 </template>
 
 <script>
+import Loading from "../components/Loading";
 import email from "../assets/Icons/envelope-regular.svg";
 import password from "../assets/Icons/lock-alt-solid.svg";
 import user from "../assets/Icons/user-alt-light.svg";
+import firebase from "firebase/app";
+import "firebase/auth";
+import db from "../firebase/firebaseInit";
 
 export default {
   name: "Register",
   components: {
+    Loading,
     email,
     password,
     user,
@@ -56,9 +63,51 @@ export default {
       username: "",
       email: "",
       password: "",
+      error: false,
+      errorMsg: "",
+      loading: false,
     };
   },
-  methods: {},
+  methods: {
+    async register() {
+      this.loading = true;
+
+      if (
+        this.firstName !== "" &&
+        this.lastName !== "" &&
+        this.username !== "" &&
+        this.email !== "" &&
+        this.password !== ""
+      ) {
+        this.error = false;
+        this.errorMsg = "";
+
+        const firebaseAuth = await firebase.auth();
+        const createUser = await firebaseAuth.createUserWithEmailAndPassword(
+          this.email,
+          this.password
+        );
+        const result = await createUser;
+        const dataBase = db.collection("users").doc(result.user.uid);
+
+        await dataBase.set({
+          firstName: this.firstName,
+          lastName: this.lastName,
+          username: this.username,
+          email: this.email,
+        });
+
+        this.loading = false;
+        this.$router.push({ name: "Home" });
+        return;
+      }
+
+      this.error = true;
+      this.errorMsg = "Please, Fill Out All The Fields !";
+      this.loading = false;
+      return;
+    },
+  },
 };
 </script>
 
