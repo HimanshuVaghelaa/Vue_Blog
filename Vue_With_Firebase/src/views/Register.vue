@@ -82,20 +82,28 @@ export default {
         this.error = false;
         this.errorMsg = "";
 
-        const firebaseAuth = await firebase.auth();
-        const createUser = await firebaseAuth.createUserWithEmailAndPassword(
-          this.email,
-          this.password
-        );
-        const result = await createUser;
-        const dataBase = db.collection("users").doc(result.user.uid);
+        try {
+          const firebaseAuth = await firebase.auth();
+          const createUser = await firebaseAuth.createUserWithEmailAndPassword(
+            this.email,
+            this.password
+          );
+          const result = await createUser;
+          const dataBase = db.collection("users").doc(result.user.uid);
 
-        await dataBase.set({
-          firstName: this.firstName,
-          lastName: this.lastName,
-          username: this.username,
-          email: this.email,
-        });
+          await dataBase.set({
+            firstName: this.firstName,
+            lastName: this.lastName,
+            username: this.username,
+            email: this.email,
+          });
+        } catch (error) {
+          this.loading = false;
+          this.errorMsg = error.message;
+          this.error = true;
+
+          return;
+        }
 
         this.loading = false;
         this.$router.push({ name: "Home" });

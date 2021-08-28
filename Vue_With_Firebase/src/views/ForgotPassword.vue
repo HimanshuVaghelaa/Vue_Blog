@@ -22,7 +22,7 @@
             <email class="icon" />
           </div>
         </div>
-        <button>Reset</button>
+        <button @click.prevent="resetPassword">Reset</button>
         <div class="angle"></div>
       </form>
       <div class="background"></div>
@@ -34,6 +34,8 @@
 import email from "../assets/Icons/envelope-regular.svg";
 import Modal from "../components/Modal";
 import Loading from "../components/Loading";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 export default {
   name: "ForgotPassword",
@@ -51,6 +53,29 @@ export default {
     Loading,
   },
   methods: {
+    resetPassword() {
+      this.loading = true;
+
+      if (this.email !== "") {
+        firebase
+          .auth()
+          .sendPasswordResetEmail(this.email)
+          .then(() => {
+            this.loading = false;
+            this.modalMessage = "Please Check Your Inbox to Reset Password !";
+            this.modalActive = true;
+          })
+          .catch((error) => {
+            this.loading = false;
+            this.modalMessage = error.message;
+            this.modalActive = true;
+          });
+      } else {
+        this.loading = false;
+        this.modalMessage = "Please, Fill Out The Field !";
+        this.modalActive = true;
+      }
+    },
     closeModal() {
       this.modalActive = !this.modalActive;
       this.email = "";
