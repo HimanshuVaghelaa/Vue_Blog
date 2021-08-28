@@ -1,5 +1,6 @@
 <template>
   <div class="form-wrap">
+    <Loading v-if="loading" />
     <form class="login">
       <p class="login-register">
         Don't have an account?
@@ -17,11 +18,12 @@
           <input type="password" placeholder="Password" v-model="password" />
           <password class="icon" />
         </div>
+        <div class="error" v-show="error">{{ this.errorMsg }}</div>
       </div>
       <router-link class="forgot-password" :to="{ name: 'ForgotPassword' }"
         >Forgot your password?</router-link
       >
-      <button>Sign In</button>
+      <button @click.prevent="signIn">Sign In</button>
       <div class="angle"></div>
     </form>
     <div class="background"></div>
@@ -29,12 +31,16 @@
 </template>
 
 <script>
+import Loading from "../components/Loading";
 import email from "../assets/Icons/envelope-regular.svg";
 import password from "../assets/Icons/lock-alt-solid.svg";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 export default {
   name: "Login",
   components: {
+    Loading,
     email,
     password,
   },
@@ -42,9 +48,38 @@ export default {
     return {
       email: "",
       password: "",
+      error: false,
+      errorMsg: "",
+      loading: false,
     };
   },
-  methods: {},
+  methods: {
+    signIn() {
+      this.loading = true;
+      this.errorMsg = "";
+
+      if (this.email !== "" && this.password !== "") {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(this.email, this.password)
+          .then(() => {
+            this.loading = false;
+            this.$router.push({ name: "Home" });
+            this.error = false;
+            this.errorMsg = "";
+          })
+          .catch((error) => {
+            this.loading = false;
+            this.error = true;
+            this.errorMsg = error.message;
+          });
+      } else {
+        this.loading = false;
+        this.error = true;
+        this.errorMsg = "Please, Fill Out All The Fields !";
+      }
+    },
+  },
 };
 </script>
 
