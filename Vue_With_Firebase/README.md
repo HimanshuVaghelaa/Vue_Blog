@@ -2,7 +2,7 @@
 
 ## Working Demo
 
-See Working Demo Here, (https://vueblog-23ee5.web.app/).
+Check Working Demo Here, https://vueblog-23ee5.web.app/.
 
 ## Project Overview
 
