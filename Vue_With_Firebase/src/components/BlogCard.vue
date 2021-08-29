@@ -16,7 +16,9 @@
       <h4>{{ post.blogTitle }}</h4>
       <h6>
         Posted on:
-        {{ post.blogDate }}
+        {{
+          new Date(post.blogDate).toLocaleString("en-us", { dateStyle: "long" })
+        }}
       </h6>
       <router-link class="link" to="#">
         View The Post <Arrow class="arrow" />

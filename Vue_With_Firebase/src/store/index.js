@@ -8,28 +8,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    sampleBlogCards: [
-      {
-        blogTitle: "Blog Card #1",
-        blogCoverPhoto: "stock-1",
-        blogDate: "Aug 23, 2021",
-      },
-      {
-        blogTitle: "Blog Card #2",
-        blogCoverPhoto: "stock-2",
-        blogDate: "Aug 24, 2021",
-      },
-      {
-        blogTitle: "Blog Card #3",
-        blogCoverPhoto: "stock-3",
-        blogDate: "Aug 25, 2021",
-      },
-      {
-        blogTitle: "Blog Card #4",
-        blogCoverPhoto: "stock-4",
-        blogDate: "Aug 26, 2021",
-      },
-    ],
     blogPosts: [],
     postLoaded: null,
     blogHTML: "Write Your Blog Title Here...!",
@@ -46,6 +24,14 @@ export default new Vuex.Store({
     profileId: null,
     profileInitials: null,
     loading: false,
+  },
+  getters: {
+    blogPostsFeed(state) {
+      return state.blogPosts.slice(0, 2);
+    },
+    blogPostsCards(state) {
+      return state.blogPosts.slice(2, 6);
+    },
   },
   mutations: {
     newBlogPost(state, payload) {

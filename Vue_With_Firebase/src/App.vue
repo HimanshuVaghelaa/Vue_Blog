@@ -1,6 +1,7 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
+      <Loading v-if="isLoading" />
       <Navigation v-if="!navigation" />
       <router-view />
       <Footer v-if="!navigation" />
@@ -9,6 +10,7 @@
 </template>
 
 <script>
+import Loading from "./components/Loading";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import firebase from "firebase/app";
@@ -17,15 +19,18 @@ import "firebase/auth";
 export default {
   name: "app",
   components: {
+    Loading,
     Navigation,
     Footer,
   },
   data() {
     return {
       navigation: false,
+      isLoading: false,
     };
   },
-  created() {
+  async created() {
+    this.isLoading = true;
     firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit("updateUser", user);
       if (user) {
@@ -33,6 +38,11 @@ export default {
       }
     });
     this.checkRoute();
+    await this.$store.dispatch("getPost");
+
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
   },
   mounted() {},
   methods: {

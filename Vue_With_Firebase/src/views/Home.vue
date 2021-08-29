@@ -3,7 +3,7 @@
     <BlogPost :post="welcomeScreen" v-if="!user" />
     <BlogPost
       :post="post"
-      v-for="(post, index) in sampleBlogPost"
+      v-for="(post, index) in blogPostsFeed"
       :key="index"
     />
     <div class="blog-card-wrap">
@@ -11,7 +11,7 @@
         <h3>View More Recent Blogs</h3>
         <div class="blog-cards">
           <BlogCard
-            v-for="(post, index) in sampleBlogCards"
+            v-for="(post, index) in blogPostsCards"
             :key="index"
             :post="post"
           />
@@ -38,8 +38,11 @@ export default {
   name: "Home",
   components: { BlogPost, BlogCard, Arrow },
   computed: {
-    sampleBlogCards() {
-      return this.$store.state.sampleBlogCards;
+    blogPostsFeed() {
+      return this.$store.getters.blogPostsFeed;
+    },
+    blogPostsCards() {
+      return this.$store.getters.blogPostsCards;
     },
     user() {
       return this.$store.state.user;
