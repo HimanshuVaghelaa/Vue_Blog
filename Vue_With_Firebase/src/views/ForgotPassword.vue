@@ -5,7 +5,7 @@
       :modalMessage="modalMessage"
       v-on:close-modal="closeModal"
     />
-    <Loading v-if="loading" />
+    <Loading v-if="isLoading" />
     <div class="form-wrap">
       <form class="reset">
         <p class="login-register">
@@ -44,7 +44,6 @@ export default {
       email: "",
       modalActive: false,
       modalMessage: "",
-      loading: false,
     };
   },
   components: {
@@ -52,26 +51,31 @@ export default {
     Modal,
     Loading,
   },
+  computed: {
+    isLoading() {
+      return this.$store.state.loading;
+    },
+  },
   methods: {
     resetPassword() {
-      this.loading = true;
+      this.$store.dispatch("setLoading", true);
 
       if (this.email !== "") {
         firebase
           .auth()
           .sendPasswordResetEmail(this.email)
           .then(() => {
-            this.loading = false;
+            this.$store.dispatch("setLoading", false);
             this.modalMessage = "Please Check Your Inbox to Reset Password !";
             this.modalActive = true;
           })
           .catch((error) => {
-            this.loading = false;
+            this.$store.dispatch("setLoading", false);
             this.modalMessage = error.message;
             this.modalActive = true;
           });
       } else {
-        this.loading = false;
+        this.$store.dispatch("setLoading", false);
         this.modalMessage = "Please, Fill Out The Field !";
         this.modalActive = true;
       }

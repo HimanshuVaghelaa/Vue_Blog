@@ -38,6 +38,7 @@ export default new Vuex.Store({
     profileUserName: null,
     profileId: null,
     profileInitials: null,
+    loading: false,
   },
   mutations: {
     toggleEditPost(state, payload) {
@@ -58,15 +59,43 @@ export default new Vuex.Store({
         state.profileFirstName.match(/(\b\S)?/g).join("") +
         state.profileLastName.match(/(\b\S)?/g).join("");
     },
+    changeFirstName(state, payload) {
+      state.profileFirstName = payload;
+    },
+    changeLastName(state, payload) {
+      state.profileLastName = payload;
+    },
+    changeUserName(state, payload) {
+      state.profileUserName = payload;
+    },
+    changeLoadingState(state, payload) {
+      state.loading = payload;
+    },
   },
   actions: {
+    setLoading({ commit }, payload) {
+      commit("changeLoadingState", payload);
+    },
     async getCurrentUser({ commit }) {
+      commit("changeLoadingState", true);
+
       const dataBase = await db
         .collection("users")
         .doc(firebase.auth().currentUser.uid);
       const dbResult = await dataBase.get();
 
       commit("setProfileInfo", dbResult);
+      commit("setProfileInitials");
+      commit("changeLoadingState", false);
+    },
+    async updateUserSettings({ commit, state }) {
+      const dataBase = await db.collection("users").doc(state.profileId);
+      await dataBase.update({
+        firstName: state.profileFirstName,
+        lastName: state.profileLastName,
+        username: state.profileUserName,
+      });
+
       commit("setProfileInitials");
     },
   },

@@ -1,6 +1,6 @@
 <template>
   <div class="form-wrap">
-    <Loading v-if="loading" />
+    <Loading v-if="isLoading" />
     <form class="login">
       <p class="login-register">
         Don't have an account?
@@ -44,18 +44,22 @@ export default {
     email,
     password,
   },
+  computed: {
+    isLoading() {
+      return this.$store.state.loading;
+    },
+  },
   data() {
     return {
       email: "",
       password: "",
       error: false,
       errorMsg: "",
-      loading: false,
     };
   },
   methods: {
     signIn() {
-      this.loading = true;
+      this.$store.dispatch("setLoading", true);
       this.errorMsg = "";
 
       if (this.email !== "" && this.password !== "") {
@@ -63,18 +67,18 @@ export default {
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then(() => {
-            this.loading = false;
+            this.$store.dispatch("setLoading", false);
             this.$router.push({ name: "Home" });
             this.error = false;
             this.errorMsg = "";
           })
           .catch((error) => {
-            this.loading = false;
+            this.$store.dispatch("setLoading", false);
             this.error = true;
             this.errorMsg = error.message;
           });
       } else {
-        this.loading = false;
+        this.$store.dispatch("setLoading", false);
         this.error = true;
         this.errorMsg = "Please, Fill Out All The Fields !";
       }

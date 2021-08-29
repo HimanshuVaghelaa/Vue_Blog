@@ -1,6 +1,6 @@
 <template>
   <div class="form-wrap">
-    <Loading v-if="loading" />
+    <Loading v-if="isLoading" />
     <form class="register">
       <p class="login-register">
         Already have an account?
@@ -68,9 +68,14 @@ export default {
       loading: false,
     };
   },
+  computed: {
+    isLoading() {
+      return this.$store.state.loading;
+    },
+  },
   methods: {
     async register() {
-      this.loading = true;
+      this.$store.dispatch("setLoading", true);
 
       if (
         this.firstName !== "" &&
@@ -98,21 +103,21 @@ export default {
             email: this.email,
           });
         } catch (error) {
-          this.loading = false;
+          this.$store.dispatch("setLoading", false);
           this.errorMsg = error.message;
           this.error = true;
 
           return;
         }
 
-        this.loading = false;
+        this.$store.dispatch("setLoading", false);
         this.$router.push({ name: "Home" });
         return;
       }
 
       this.error = true;
       this.errorMsg = "Please, Fill Out All The Fields !";
-      this.loading = false;
+      this.$store.dispatch("setLoading", false);
       return;
     },
   },
