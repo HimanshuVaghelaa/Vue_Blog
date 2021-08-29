@@ -15,7 +15,7 @@
             ref="blogPhoto"
             id="blog-photo"
             @change="fileChange"
-            accept=".png, .jpg, ,.jpeg"
+            accept=".png, .jpg, ,jpeg"
           />
           <button
             @click="openPreview"
@@ -24,9 +24,7 @@
           >
             Preview Photo
           </button>
-          <span v-if="this.$store.state.blogPhotoFileURL"
-            >File Chosen: {{ this.$store.state.blogPhotoName }}</span
-          >
+          <span>File Chosen: {{ this.$store.state.blogPhotoName }}</span>
         </div>
       </div>
       <div class="editor">
@@ -38,9 +36,9 @@
         />
       </div>
       <div class="blog-actions">
-        <button @click="uploadBlog">Publish Blog</button>
+        <button @click="updateBlog">Save Changes</button>
         <router-link class="router-button" :to="{ name: 'BlogPreview' }"
-          >Post Preview</router-link
+          >Preview Changes</router-link
         >
       </div>
     </div>
@@ -60,6 +58,20 @@ Quill.register("modules/imageResize", ImageResize);
 
 export default {
   name: "CreatePost",
+  data() {
+    return {
+      file: null,
+      error: null,
+      errorMsg: null,
+      routeID: null,
+      currentBlog: null,
+      editorSettings: {
+        modules: {
+          imageResize: {},
+        },
+      },
+    };
+  },
   components: {
     BlogCoverPreview,
     Loading,
@@ -91,17 +103,12 @@ export default {
       },
     },
   },
-  data() {
-    return {
-      file: null,
-      error: null,
-      errorMsg: null,
-      editorSettings: {
-        modules: {
-          imageResize: {},
-        },
-      },
-    };
+  async mounted() {
+    this.routeID = this.$route.params.blogid;
+    this.currentBlog = await this.$store.state.blogPosts.filter((post) => {
+      return post.blogID === this.routeID;
+    });
+    this.$store.commit("setBlogState", this.currentBlog[0]);
   },
   methods: {
     fileChange() {
@@ -134,11 +141,11 @@ export default {
       );
     },
 
-    uploadBlog() {
+    async updateBlog() {
+      const dataBase = await db.collection("blogPosts").doc(this.routeID);
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
         if (this.file) {
           this.$store.dispatch("setLoading", true);
-
           const storageRef = firebase.storage().ref();
           const docRef = storageRef.child(
             `documents/BlogCoverPhotos/${this.$store.state.blogPhotoName}`
@@ -154,19 +161,14 @@ export default {
             },
             async () => {
               const downloadURL = await docRef.getDownloadURL();
-              const timestamp = await Date.now();
-              const dataBase = await db.collection("blogPosts").doc();
 
-              await dataBase.set({
-                blogID: dataBase.id,
+              await dataBase.update({
                 blogHTML: this.blogHTML,
                 blogCoverPhoto: downloadURL,
                 blogCoverPhotoName: this.blogCoverPhotoName,
                 blogTitle: this.blogTitle,
-                profileId: this.profileId,
-                date: timestamp,
               });
-
+              await this.$store.dispatch("updatePost", this.routeID);
               this.$store.dispatch("setLoading", false);
               this.$router.push({
                 name: "ViewBlog",
@@ -176,17 +178,23 @@ export default {
           );
           return;
         }
-        this.error = true;
-        this.errorMsg = "Please ensure you uploaded a cover photo!";
-        setTimeout(() => {
-          this.error = false;
-        }, 5000);
+        this.$store.dispatch("setLoading", true);
+        await dataBase.update({
+          blogHTML: this.blogHTML,
+          blogTitle: this.blogTitle,
+        });
+        await this.$store.dispatch("updatePost", this.routeID);
+        this.$store.dispatch("setLoading", false);
+        this.$router.push({
+          name: "ViewBlog",
+          params: { blogid: dataBase.id },
+        });
         return;
       }
-      this.error = true;
+      this.$store.dispatch("setLoading", true);
       this.errorMsg = "Please ensure Blog Title & Blog Post has been filled!";
       setTimeout(() => {
-        this.error = false;
+        this.$store.dispatch("setLoading", false);
       }, 5000);
       return;
     },
@@ -196,4 +204,6 @@ export default {
 
 <style lang="scss">
 @import "../assets/styles/CreatePost.scss";
+@import "../assets/styles/BlogPreview.scss";
+@import "../assets/styles/EditBlog.scss";
 </style>

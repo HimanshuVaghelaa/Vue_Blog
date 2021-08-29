@@ -6,7 +6,7 @@
       v-for="(post, index) in blogPostsFeed"
       :key="index"
     />
-    <div class="blog-card-wrap">
+    <div class="blog-card-wrap" v-show="showRecentBlogsSection">
       <div class="container">
         <h3>View More Recent Blogs</h3>
         <div class="blog-cards">
@@ -46,6 +46,10 @@ export default {
     },
     user() {
       return this.$store.state.user;
+    },
+    showRecentBlogsSection() {
+      if (this.$store.state.blogPosts?.length > 3) return true;
+      return false;
     },
   },
   data() {

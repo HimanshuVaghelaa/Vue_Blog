@@ -69,6 +69,12 @@
         <router-link class="link" :to="{ name: 'Login' }" v-if="!user"
           >Login/Register</router-link
         >
+        <router-link class="link" :to="{ name: 'Profile' }" v-if="user">
+          <p>Profile</p>
+        </router-link>
+        <div class="link" @click="signOut" v-if="user">
+          <p>Sign Out</p>
+        </div>
       </ul>
     </transition>
   </header>
