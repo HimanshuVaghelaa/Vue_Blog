@@ -10,10 +10,10 @@
       <h2>Account Settings</h2>
       <div class="profile-info">
         <div class="initials">{{ $store.state.profileInitials }}</div>
-        <div class="admin-badge">
+        <!-- <div class="admin-badge">
           <adminIcon class="icon" />
           <span>admin</span>
-        </div>
+        </div> -->
         <div class="input">
           <label for="firstName">First Name:</label>
           <input type="text" id="firstName" v-model="firstName" />
@@ -39,14 +39,14 @@
 <script>
 import Loading from "../components/Loading";
 import Modal from "../components/Modal";
-import adminIcon from "../assets/Icons/user-crown-light.svg";
+// import adminIcon from "../assets/Icons/user-crown-light.svg";
 
 export default {
   name: "Profile",
   components: {
     Loading,
     Modal,
-    adminIcon,
+    // adminIcon,
   },
   data() {
     return {

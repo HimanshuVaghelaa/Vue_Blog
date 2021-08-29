@@ -27,7 +27,9 @@
             <router-link class="link" :to="{ name: 'Blogs' }"
               >Blogs</router-link
             >
-            <router-link class="link" to="#">Create Post</router-link>
+            <router-link class="link" :to="{ name: 'CreatePost' }" v-if="user"
+              >Create Post</router-link
+            >
             <router-link class="link" :to="{ name: 'Login' }" v-if="!user"
               >Login In / Register</router-link
             >

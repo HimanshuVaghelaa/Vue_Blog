@@ -10,7 +10,9 @@
         <ul>
           <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
           <router-link class="link" :to="{ name: 'Blogs' }">Blogs</router-link>
-          <router-link class="link" to="#">Create Post</router-link>
+          <router-link class="link" :to="{ name: 'CreatePost' }" v-if="user"
+            >Create Post</router-link
+          >
           <router-link class="link" :to="{ name: 'Login' }" v-if="!user"
             >Login/Register</router-link
           >
@@ -41,12 +43,12 @@
                   <p>Profile</p>
                 </router-link>
               </div>
-              <div class="option">
+              <!-- <div class="option">
                 <router-link class="option" :to="{ name: 'Admin' }">
                   <adminIcon class="icon" />
                   <p>Admin</p>
                 </router-link>
-              </div>
+              </div> -->
               <div class="option" @click="signOut">
                 <signOutIcon class="icon" />
                 <p>Sign Out</p>
@@ -61,7 +63,9 @@
       <ul class="mobile-nav" v-show="mobileNav">
         <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
         <router-link class="link" :to="{ name: 'Blogs' }">Blogs</router-link>
-        <router-link class="link" to="#">Create Post</router-link>
+        <router-link class="link" :to="{ name: 'CreatePost' }" v-if="user"
+          >Create Post</router-link
+        >
         <router-link class="link" :to="{ name: 'Login' }" v-if="!user"
           >Login/Register</router-link
         >
@@ -72,7 +76,7 @@
 <script>
 import menuIcon from "../assets/Icons/bars-regular.svg";
 import userIcon from "../assets/Icons/user-alt-light.svg";
-import adminIcon from "../assets/Icons/user-crown-light.svg";
+// import adminIcon from "../assets/Icons/user-crown-light.svg";
 import signOutIcon from "../assets/Icons/sign-out-alt-regular.svg";
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -82,7 +86,7 @@ export default {
   components: {
     menuIcon,
     userIcon,
-    adminIcon,
+    // adminIcon,
     signOutIcon,
   },
   data() {

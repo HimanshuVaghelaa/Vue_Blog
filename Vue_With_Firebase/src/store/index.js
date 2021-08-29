@@ -30,6 +30,13 @@ export default new Vuex.Store({
         blogDate: "Aug 26, 2021",
       },
     ],
+    blogPosts: [],
+    postLoaded: null,
+    blogHTML: "Write Your Blog Title Here...!",
+    blogTitle: "",
+    blogPhotoName: "",
+    blogPhotoFileURL: "",
+    blogPhotoPreview: "",
     editPost: false,
     user: null,
     profileEmail: null,
@@ -41,6 +48,21 @@ export default new Vuex.Store({
     loading: false,
   },
   mutations: {
+    newBlogPost(state, payload) {
+      state.blogHTML = payload;
+    },
+    updateBlogTitle(state, payload) {
+      state.blogTitle = payload;
+    },
+    fileNameChange(state, payload) {
+      state.blogPhotoName = payload;
+    },
+    createFileURL(state, payload) {
+      state.blogPhotoFileURL = payload;
+    },
+    openPhotoPreview(state) {
+      state.blogPhotoPreview = !state.blogPhotoPreview;
+    },
     toggleEditPost(state, payload) {
       state.editPost = payload;
     },
@@ -77,8 +99,6 @@ export default new Vuex.Store({
       commit("changeLoadingState", payload);
     },
     async getCurrentUser({ commit }) {
-      commit("changeLoadingState", true);
-
       const dataBase = await db
         .collection("users")
         .doc(firebase.auth().currentUser.uid);
@@ -86,7 +106,6 @@ export default new Vuex.Store({
 
       commit("setProfileInfo", dbResult);
       commit("setProfileInitials");
-      commit("changeLoadingState", false);
     },
     async updateUserSettings({ commit, state }) {
       const dataBase = await db.collection("users").doc(state.profileId);
@@ -97,6 +116,24 @@ export default new Vuex.Store({
       });
 
       commit("setProfileInitials");
+    },
+    async getPost({ state }) {
+      const dataBase = await db.collection("blogPosts").orderBy("date", "desc");
+      const dbResults = await dataBase.get();
+      dbResults.forEach((doc) => {
+        if (!state.blogPosts.some((post) => post.blogID === doc.id)) {
+          const data = {
+            blogID: doc.data().blogID,
+            blogHTML: doc.data().blogHTML,
+            blogCoverPhoto: doc.data().blogCoverPhoto,
+            blogTitle: doc.data().blogTitle,
+            blogDate: doc.data().date,
+            blogCoverPhotoName: doc.data().blogCoverPhotoName,
+          };
+          state.blogPosts.push(data);
+        }
+      });
+      state.postLoaded = true;
     },
   },
   modules: {},

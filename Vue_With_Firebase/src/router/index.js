@@ -53,12 +53,36 @@ const routes = [
       title: "Profile",
     },
   },
+  // {
+  //   path: "/admin",
+  //   name: "Admin",
+  //   component: () => import("../views/Admin.vue"),
+  //   meta: {
+  //     title: "Admin",
+  //   },
+  // },
   {
-    path: "/admin",
-    name: "Admin",
-    component: () => import("../views/Admin.vue"),
+    path: "/create-post",
+    name: "CreatePost",
+    component: () => import("../views/CreatePost.vue"),
     meta: {
-      title: "Admin",
+      title: "Create Post",
+    },
+  },
+  {
+    path: "/post-preview",
+    name: "BlogPreview",
+    component: () => import("../views/BlogPreview.vue"),
+    meta: {
+      title: "Preview Blog Post",
+    },
+  },
+  {
+    path: "/view-blog/:blogid",
+    name: "ViewBlog",
+    component: () => import("../views/ViewBlog.vue"),
+    meta: {
+      title: "View Blog Post",
     },
   },
 ];
