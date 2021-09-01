@@ -16,12 +16,15 @@
             :post="post"
           />
         </div>
+        <button @click="$router.push({ name: 'Blogs' })">
+          View All Blogs
+        </button>
       </div>
     </div>
     <div class="updates" v-if="!user">
       <div class="container">
         <h2>never miss a post. Register for your free account today!</h2>
-        <router-link class="router-button" to="#">
+        <router-link class="router-button" :to="{ name: 'Register' }">
           Register for Vue_Blog <Arrow class="arrow arrow-light" />
         </router-link>
       </div>
@@ -61,18 +64,6 @@ export default {
         welcomeScreen: true,
         photo: "coding",
       },
-      sampleBlogPost: [
-        {
-          title: "This is Filler Title!",
-          blogHTML: "This is a filler blog post title!",
-          blogCoverPhoto: "beautiful-stories",
-        },
-        {
-          title: "This is Filler Title!",
-          blogHTML: "This is a filler blog post title!",
-          blogCoverPhoto: "designed-for-everyone",
-        },
-      ],
     };
   },
 };
