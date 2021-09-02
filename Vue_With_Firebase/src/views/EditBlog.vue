@@ -24,8 +24,13 @@
           >
             Preview Photo
           </button>
-          <span>File Chosen: {{ this.$store.state.blogPhotoName }}</span>
         </div>
+      </div>
+      <div
+        class="blog-info-selected-file"
+        v-if="this.$store.state.blogPhotoFileURL"
+      >
+        <span>File Chosen: {{ this.$store.state.blogPhotoName }}</span>
       </div>
       <div class="editor">
         <vue-editor

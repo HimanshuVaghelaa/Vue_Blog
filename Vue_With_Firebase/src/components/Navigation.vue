@@ -49,16 +49,27 @@
                   <p>Admin</p>
                 </router-link>
               </div> -->
-              <div class="option" @click="signOut">
-                <signOutIcon class="icon" />
-                <p>Sign Out</p>
+              <div class="option">
+                <div class="option-sign-out" @click="signOut">
+                  <signOutIcon class="icon" />
+                  <p>Sign Out</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </nav>
-    <menuIcon class="menu-icon" @click="toggleMobileNav" v-show="mobile" />
+    <menuIcon
+      class="menu-icon"
+      @click="toggleMobileNav"
+      v-show="mobile && !mobileNav"
+    />
+    <menuCloseIcon
+      class="menu-icon menu-icon-close"
+      @click="toggleMobileNav"
+      v-show="mobile && mobileNav"
+    />
     <transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
         <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
@@ -81,6 +92,7 @@
 </template>
 <script>
 import menuIcon from "../assets/Icons/bars-regular.svg";
+import menuCloseIcon from "../assets/Icons/cross-icon.svg";
 import userIcon from "../assets/Icons/user-alt-light.svg";
 // import adminIcon from "../assets/Icons/user-crown-light.svg";
 import signOutIcon from "../assets/Icons/sign-out-alt-regular.svg";
@@ -91,6 +103,7 @@ export default {
   name: "Navigation",
   components: {
     menuIcon,
+    menuCloseIcon,
     userIcon,
     // adminIcon,
     signOutIcon,
@@ -141,4 +154,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../assets/styles/Navigation.scss";
+
+.option-sign-out {
+  display: flex;
+  cursor: pointer;
+}
+
+.menu-icon-close {
+  top: 34px !important;
+  right: 27px !important;
+}
 </style>

@@ -24,6 +24,10 @@
     background-color: #303030;
     text-decoration: none;
 
+    @media (max-width: 425px) {
+      padding: 8px 16px;
+    }
+
     &:hover {
       background-color: rgba(48, 48, 48, 0.7);
     }
@@ -63,6 +67,12 @@
     display: flex;
     margin-bottom: 32px;
 
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
     input:nth-child(1) {
       min-width: 300px;
     }
@@ -85,6 +95,10 @@
       position: relative;
       display: flex;
 
+      @media (max-width: 768px) {
+        margin-left: 0px;
+      }
+
       input {
         display: none;
       }
@@ -94,11 +108,25 @@
         text-transform: initial;
       }
 
-      span {
-        font-size: 12px;
-        margin-left: 16px;
-        align-self: center;
-      }
+      // span {
+      //   font-size: 12px;
+      //   margin-left: 16px;
+      //   align-self: center;
+      // }
+    }
+  }
+
+  .blog-info-selected-file {
+    margin-bottom: 16px;
+
+    span {
+      font-size: 14px;
+      align-self: center;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 100%;
+      display: inline-block;
     }
   }
 
