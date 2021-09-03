@@ -204,6 +204,13 @@ export default {
       return;
     },
   },
+  beforeDestroy() {
+    this.$store.state.blogPhotoName = "";
+    this.$store.state.blogPhotoFileURL = "";
+    this.$store.state.blogPhotoPreview = "";
+    this.$store.state.blogTitle = "";
+    this.$store.state.blogHTML = "Write Your Blog Title Here...!";
+  },
 };
 </script>
 

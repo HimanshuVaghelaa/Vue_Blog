@@ -32,6 +32,9 @@ export default {
       },
     },
   },
+  created() {
+    window.scrollTo(0, 0);
+  },
   beforeDestroy() {
     this.$store.commit("toggleEditPost", false);
   },

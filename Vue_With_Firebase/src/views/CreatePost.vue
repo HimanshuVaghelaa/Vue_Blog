@@ -26,7 +26,10 @@
           </button>
         </div>
       </div>
-      <div class="blog-info-selected-file" v-if="this.$store.state.blogPhotoFileURL">
+      <div
+        class="blog-info-selected-file"
+        v-if="this.$store.state.blogPhotoFileURL"
+      >
         <span>File Chosen: {{ this.$store.state.blogPhotoName }}</span>
       </div>
       <div class="editor">
@@ -190,6 +193,13 @@ export default {
       }, 5000);
       return;
     },
+  },
+  beforeDestroy() {
+    this.$store.state.blogPhotoName = "";
+    this.$store.state.blogPhotoFileURL = "";
+    this.$store.state.blogPhotoPreview = "";
+    this.$store.state.blogTitle = "";
+    this.$store.state.blogHTML = "Write Your Blog Title Here...!";
   },
 };
 </script>
